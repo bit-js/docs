@@ -1,0 +1,12 @@
+* {
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Helvetica Neue",  Arial, sans-serif;
+}
+
+a {
+    text-decoration: none;
+
+    &:hover { 
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
