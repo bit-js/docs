@@ -1,6 +1,8 @@
 import { Byte, send } from '@bit-js/byte';
 import { Glob } from 'bun';
 
+import "./snippets/build";
+
 const publicDir = `${import.meta.dir}/public/`;
 const dirLen = publicDir.length;
 

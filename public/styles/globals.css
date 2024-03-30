@@ -15,7 +15,7 @@ a {
     }
 }
 
-code {
+code:not(.hljs) {
     margin-top: 3px;
     padding: 3px 5px;
 
@@ -31,8 +31,12 @@ body {
     width: 100vw;
 }
 
+body::-webkit-scrollbar {
+    display: none;
+}
+
 main {
-    margin: 100px 30vw 0 30vw;
+    margin: 100px 30vw;
 
     & #intro {
         margin-bottom: 50px;
