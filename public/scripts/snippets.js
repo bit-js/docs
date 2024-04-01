@@ -1,1 +1,1 @@
-const snippets={"file":"<code class='language-javascript' hljs'><span class=\"hljs-variable language_\">console</span>.<span class=\"hljs-title function_\">log</span>(<span class=\"hljs-string\">&#x27;H&#x27;</span>);\n</code>"};for(const e of document.querySelectorAll('pre[data-snippet]'))e.innerHTML=snippets[e.dataset.snippet];
+const snippets={"files":"<code class='language-javascript' hljs'></code>","file":"<code class='language-javascript' hljs'></code>"};for(const e of document.querySelectorAll('pre[data-snippet]'))e.innerHTML=snippets[e.dataset.snippet];

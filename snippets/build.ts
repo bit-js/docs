@@ -5,7 +5,7 @@ import { watch } from 'fs';
 
 hljs.registerLanguage('js', javascript);
 
-const srcDir = import.meta.dir + '/src';
+const srcDir = import.meta.dir + '/src/';
 
 const highlightSettings = { language: 'js' };
 const watchSettings = { recursive: true };
@@ -19,9 +19,8 @@ function getID(filename: string) {
 }
 
 // Return the highlighted HTML of the file content
-const srcWithSlash = srcDir + '/';
 async function highlightFile(filename: string) {
-    return `<code class='language-javascript' hljs'>${hljs.highlight(await Bun.file(srcWithSlash + filename).text(), highlightSettings).value}</code>`;
+    return `<code class='language-javascript' hljs'>${hljs.highlight(await Bun.file(srcDir + filename).text(), highlightSettings).value}</code>`;
 }
 
 // Search and build files
@@ -47,8 +46,6 @@ export default async function watchSnippets(out: string) {
     return watch(srcDir, watchSettings, async (event, name) => {
         if (name === null) return;
         console.log('Rebuilding snippets...');
-        console.log('Event:', event);
-        console.log('File:', name);
 
         // Only change one property and rewrite the file content
         if (event === 'change') obj[getID(name)] = await highlightFile(name);
@@ -56,6 +53,5 @@ export default async function watchSnippets(out: string) {
         else await build(obj);
 
         Bun.write(out, code(obj));
-
     });
 }
