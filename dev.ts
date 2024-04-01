@@ -1,7 +1,6 @@
 import { Byte, send } from '@bit-js/byte';
 import { Glob } from 'bun';
-
-import "./snippets/build";
+import watchSnippets from './snippets/build';
 
 const publicDir = `${import.meta.dir}/public/`;
 const dirLen = publicDir.length;
@@ -23,9 +22,11 @@ for (const path of paths) app.any(
     () => send.body(Bun.file(path))
 );
 
-
 // Serve assets
 app.fallback((ctx) => send.body(Bun.file(publicDir + ctx.path)));
+
+// Reload snippets on change
+watchSnippets(`${publicDir}scripts/snippets.js`);
 
 // Serve with Bun
 Bun.serve({
