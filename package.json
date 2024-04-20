@@ -13,6 +13,6 @@
     "dev": "bun run dev.ts"
   },
   "dependencies": {
-    "@bit-js/byte": "^1.1.1"
+    "@bit-js/blitz": "^1.0.20"
   }
 }

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <meta name='description' content='BitJS blog'>
+
+    <title>BitJS: Blog</title>
+
+    <link rel='stylesheet' href='/styles/globals.css'>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script defer src='/scripts/snippets.js'></script>
+</head>
+
+<body>
+    <main>
+        <div id='intro'>
+            <h1>blitz</h1>
+            <p>How a tree router works under the hood.</p>
+        </div>
+
+        <div id='content'>
+            <div>
+                <h2>Radix tree</h2>
+
+                <p>
+                    A radix tree, also known as a PATRICIA trie,
+                    is a data structure for storing and retrieving data associated with string keys.
+                </p>
+                <p>
+                    Unlike a standard trie that stores individual characters,
+                    a radix tree packs a punch by storing entire key prefixes (sequences of characters) at each node.
+                    This approach leads to significant space savings, especially when dealing with large datasets with
+                    common prefixes.
+                </p>
+
+                <p>
+                    Imagine we have a list of keys <code>abcd</code>, <code>acbd</code>, <code>abcc</code> and
+                    <code>bacd</code>.
+                    The process to search for the key <code>abcd</code> would be:
+                </p>
+
+                <p><strong>+</strong> We start at the root node.</p>
+                <p>
+                    <strong>+</strong> We check whether the stored prefix (<code>a</code>)
+                    matches the start of the key.
+                </p>
+                <p>
+                    <strong>+</strong> If it matches, we follow the child node that has a
+                    matching label (<code>b</code>) with the part after <code>bcd</code>.
+                </p>
+                <p>
+                    <strong>+</strong> Continue the process until we reach the end of the key.
+                    If the last node is a leaf node it means the key exists in the list.
+                </p>
+
+                <h2>Route patterns</h2>
+
+                <p>
+                    While radix trees excel at matching common prefixes, they can also handle specific route patterns.
+                </p>
+                <p>
+                    Special nodes can be used to represent wildcard characters (<code>*</code>) that match any sequence
+                    of characters, or parameters denoted by colons (<code>/:id</code>).
+                </p>
+
+                <p>In <code>@bit-js/blitz</code>, a tree node structure is as follows:</p>
+                <pre data-snippet='tree/node/static'></pre>
+
+                <p>And the matching order:</p>
+                <pre data-snippet='tree/node/match-order'></pre>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

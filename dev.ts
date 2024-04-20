@@ -1,35 +1,29 @@
-import { Byte, send } from '@bit-js/byte';
+import { FileSystemRouter } from '@bit-js/blitz';
 import { Glob } from 'bun';
 import watchSnippets from './snippets/build';
 
 const publicDir = `${import.meta.dir}/public/`;
-const dirLen = publicDir.length;
+const glob = new Glob('**/*.html');
 
-const app = new Byte();
-
-// Serve html
-const paths = new Glob('**/*.html').scanSync({
-    absolute: true,
-    onlyFiles: true,
-    cwd: publicDir
+// Matching function
+const router = new FileSystemRouter({
+    on: Bun.file,
+    scan: (dir) => glob.scanSync(dir)
 });
 
-for (const path of paths) app.any(
-    path.endsWith('index.html')
-        ? path.substring(dirLen, path.length - 10)
-        : path.substring(dirLen, path.length - 5),
-
-    () => send.body(Bun.file(path))
-);
-
-// Serve assets
-app.fallback((ctx) => send.body(Bun.file(publicDir + ctx.path)));
+const match = router.scan(publicDir);
 
 // Reload snippets on change
 watchSnippets(`${publicDir}scripts/snippets.js`);
 
-// Serve with Bun
-Bun.serve({
-    fetch: app.fetch,
-    error: () => new Response()
-});
+// Serve
+export default {
+    fetch(req: Request) {
+        const ctx = match(req);
+        return new Response(ctx.result ?? Bun.file(publicDir + ctx.path));
+    },
+
+    error() {
+        return new Response();
+    }
+}
