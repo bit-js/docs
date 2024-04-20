@@ -1,5 +1,7 @@
+/* Global text styles */
 * {
-    font-family: monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+    color: rgb(209, 213, 219);
 }
 
 p {
@@ -7,14 +9,17 @@ p {
 }
 
 a {
-    text-decoration: none;
+    text-decoration: underline;
+    cursor: pointer;
 
-    &:hover { 
-        text-decoration: underline;
-        cursor: pointer;
-    }
+    font-weight: 700;
 }
 
+a, p {
+    font-size: .875rem;
+}
+
+/* Codeblock style */
 code:not(.hljs) {
     margin-top: 3px;
     padding: 3px 5px;
@@ -29,6 +34,8 @@ body {
     padding: 0;
 
     width: 100vw;
+
+    background-color: rgb(24, 24, 27);
 }
 
 body::-webkit-scrollbar {
@@ -42,22 +49,18 @@ main {
         margin-bottom: 50px;
 
         & h1 {
-            font-size: 2.8rem;
-        }
-
-        & p {
-            font-size: 1.4rem;
+            font-size: 2.25rem;
         }
     }
 
     & #content > * {
-        & * {
-            font-size: 1.1rem;
+        & h2 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
         }
 
-        & h2 {
-            color: black;
-            font-size: 1.5rem;
+        & p {
+            margin-top: 0;
         }
 
         margin-bottom: 50px;
@@ -68,3 +71,13 @@ main {
     margin-right: 10px;
 }
 
+.tags {
+    display: flex;
+
+    & p {
+        font-size: .75rem;
+        color: rgb(107, 114, 128);
+        
+        margin-right: 15px;
+    }
+}
