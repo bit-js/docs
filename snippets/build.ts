@@ -41,15 +41,8 @@ export default async function watchSnippets(out: string) {
     await build(obj);
     Bun.write(out, code(obj));
 
-    return watch(srcDir, watchSettings, async (event, name) => {
-        if (name === null) return;
-        console.log('Rebuilding snippets...', event, name);
-
-        // Only change one property and rewrite the file content
-        if (event === 'change') obj[getID(name)] = await highlightFile(name);
-        // Rebuild the entire directory
-        else await build(obj);
-
+    return watch(srcDir, watchSettings, async () => {
+        await build(obj);
         Bun.write(out, code(obj));
     });
 }

@@ -19,59 +19,54 @@
     <main>
         <div id='intro'>
             <h1>blitz</h1>
-            <p>How a tree router works under the hood.</p>
+            <p>An important part of a web framework is routing, which might seem simple when you first think about it.
+            </p>
         </div>
 
         <div id='content'>
             <div>
+                <h2>The start</h2>
+
+                <p>Here is what my first routing algorithm looked like when I just started building a framework:</p>
+                <pre data-snippet='algorithm/first'></pre>
+
+                <p>One problem you can already see here is that this is linear matching algorithm.</p>
+                <p>Later on, I improved it into constant time matching for static pathnames.</p>
+                <pre data-snippet='algorithm/second'></pre>
+
+                <p>
+                    But static path alone is not enough for matching. Popular frameworks
+                    include support for URL pattern matching like parameters and wildcards.
+                </p>
+                <p>
+                    So the idiomatic way that I thought about is to match the URL against every single
+                    pattern in a pattern list, which have been previously compiled by <code>path-to-regexp</code>.
+                </p>
+                <pre data-snippet='algorithm/third'></pre>
+
+                <p>
+                    This is obviously constant time matching but only for static pathnames.
+                    If the path is not in the <code>routesMap</code> it will do linear matching for every pattern.
+                </p>
+
                 <h2>Radix tree</h2>
+                <p>
+                    I was searching for a replacement URL router to use in my framework, which then I found
+                    <a href='//github.com/medleyjs/router'><code>@medley/router</code></a>. It could handle URL patterns
+                    like above while being at least 5x faster
+                    than my solution.
+                </p>
+                <p>So I took some time trying to understand what is being done under the hood and here's what I found.
+                </p>
+                <p>
+                    The router stores route patterns on a radix tree, but this is a modified radix tree with additional
+                    properties to specify URL params and wildcards.
+                </p>
+                <p>A normal radix tree node looks like this:</p>
+                <pre data-snippet='tree/basic-node'></pre>
 
-                <p>
-                    A radix tree, also known as a PATRICIA trie,
-                    is a data structure for storing and retrieving data associated with string keys.
-                </p>
-                <p>
-                    Unlike a standard trie that stores individual characters,
-                    a radix tree packs a punch by storing entire key prefixes (sequences of characters) at each node.
-                    This approach leads to significant space savings, especially when dealing with large datasets with
-                    common prefixes.
-                </p>
-
-                <p>
-                    Imagine we have a list of keys <code>abcd</code>, <code>acbd</code>, <code>abcc</code> and
-                    <code>bacd</code>.
-                    The process to search for the key <code>abcd</code> would be:
-                </p>
-
-                <p><strong>+</strong> We start at the root node.</p>
-                <p>
-                    <strong>+</strong> We check whether the stored prefix (<code>a</code>)
-                    matches the start of the key.
-                </p>
-                <p>
-                    <strong>+</strong> If it matches, we follow the child node that has a
-                    matching label (<code>b</code>) with the part after <code>bcd</code>.
-                </p>
-                <p>
-                    <strong>+</strong> Continue the process until we reach the end of the key.
-                    If the last node is a leaf node it means the key exists in the list.
-                </p>
-
-                <h2>Route patterns</h2>
-
-                <p>
-                    While radix trees excel at matching common prefixes, they can also handle specific route patterns.
-                </p>
-                <p>
-                    Special nodes can be used to represent wildcard characters (<code>*</code>) that match any sequence
-                    of characters, or parameters denoted by colons (<code>/:id</code>).
-                </p>
-
-                <p>In <code>@bit-js/blitz</code>, a tree node structure is as follows:</p>
-                <pre data-snippet='tree/node/static'></pre>
-
-                <p>And the matching order:</p>
-                <pre data-snippet='tree/node/match-order'></pre>
+                <p>And here's the tree nodes that was implemented:</p>
+                <pre data-snippet='tree/route-nodes'></pre>
             </div>
         </div>
     </main>
