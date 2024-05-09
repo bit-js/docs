@@ -1,0 +1,36 @@
+---
+title: Getting Started
+description: Getting Started with Byte.
+---
+
+This page contains guides for using Byte with [Bun](#Bun) and [Deno](#Deno).
+
+## Bun
+Install `@bit-js/byte` as a dependency:
+```bash
+bun add @bit-js/byte
+```
+
+A simple echo server in Bun:
+```ts
+# index.ts
+import { Byte } from '@bit-js/byte';
+
+export default new Byte()
+    .get('/', (ctx) => ctx.body('Hi'));
+```
+
+Navigate to [127.0.0.1:3000](http://127.0.0.1:3000). It should show `Hi` as a result.
+
+## Deno
+A simple echo server in Deno:
+```ts
+import { Byte } from 'npm:@bit-js/byte';
+
+const app = new Byte()
+    .get('/', (ctx) => ctx.body('Hi'));
+
+Deno.serve({ port: 3000 }, app.fetch);
+```
+
+Navigate to [127.0.0.1:3000](http://127.0.0.1:3000). It should show `Hi` as a result.

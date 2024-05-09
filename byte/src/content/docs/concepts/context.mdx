@@ -1,0 +1,84 @@
+---
+title: Context
+description: The request context in Byte.
+---
+
+Context is an object which contains the parsed data from the current request.
+
+This object is passed in the request handler as an argument.
+```ts
+app.get((ctx) => {
+    // Do something with context
+});
+```
+
+### Path
+The context includes the parsed request pathname and the start and end indices of the pathname.
+```ts
+// The parsed path
+ctx.path;
+
+// The path start and end indices
+ctx.pathStart;
+ctx.pathEnd;
+```
+
+### Parameters
+The context includes the URL parameters and results of validators.
+```ts
+// URL parameters
+ctx.params;
+
+// Validator results
+ctx.state;
+```
+
+### Request
+The context includes the original request object.
+```ts
+ctx.req;
+```
+
+### Response methods
+The context includes methods to return a response object.
+
+```ts
+// Send a response with the provided BodyInit (text, streams, binary format)
+ctx.body('Hi');
+
+// Send a response with no body
+ctx.head();
+
+// Send a primitive value
+ctx.value(0);
+
+// Send plain text response
+ctx.text('Hi');
+
+// Send binary response (Unrecognizable format)
+ctx.binary(buffer);
+
+// Send HTML response
+ctx.html('<p>Hi</p>');
+
+// Send XML response
+ctx.xml('<text>Hi</text>'); 
+
+// Send JSON payload
+ctx.json({ hello: 'world' }); 
+
+// Server-sent events
+ctx.events(readableStream); 
+
+// Redirection
+ctx.redirect(location, statusCode); 
+```
+
+You can add headers, set the status code and text of the response:
+```ts
+// Set status
+ctx.status = 404;
+
+// Add or set current headers
+ctx.headers['Content-Type'] = 'text/plain';
+```

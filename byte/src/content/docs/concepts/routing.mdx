@@ -1,0 +1,52 @@
+---
+title: Routing
+description: The basics of routing in Byte.
+---
+
+HTTP routing is the process of directing an incoming request to a handler function in your web application.
+
+To register a route handler, call a method named after a HTTP verb, with a path and a handler as arguments.
+```ts
+const app = new Byte()
+    .get('/', (ctx) => ctx.body('Hi'))
+    .post('/json', (ctx) => ctx.json({ hello: 'world' }));
+```
+
+Supported methods are `get`, `post`, `put`, `delete`, `options`, and `head`.
+
+To handle all method using a handler, register the handle with `any` method:
+```ts
+const app = new Byte()
+    .any('/', (ctx) => ctx.body('Hi'));
+```
+
+## Patterns
+Basic route patterns are supported.
+
+### URL parameters
+Capture the value of a part separated by slash characters of the pathname.
+```ts
+app.get('/user/:id', (ctx) => {
+    ctx.params.id; // Use the captured value
+});
+```
+
+Example cases:
+- `/user/123`: `ctx.params` is `{ id: '123' }`.
+- `/user/456/info`: Does not match the pattern.
+- `/user`: Does not match the pattern.
+
+### Wildcards
+Capture a slice from a specific part of a pathname.
+```ts
+app.get('/user/*', (ctx) => {
+    ctx.params.$; // Use the captured value
+});
+```
+
+Example cases:
+- `/user/123`: `ctx.params` is `{ $: '123' }`.
+- `/user/456/info`: `ctx.params` is `{ $: '456/info' }`.
+- `/user`: Does not match the pattern.
+
+The type of `ctx.params` is inferred automatically from the registered pattern.
