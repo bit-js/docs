@@ -5,15 +5,13 @@ description: The basics of routing in Byte.
 
 HTTP routing is the process of directing an incoming request to a handler function in your web application.
 
-To register a route handler, call a method named after a HTTP verb, with a path and a handler as arguments.
+To register a route handler, call methods named after [HTTP verbs](https://github.com/bit-js/byte/blob/main/src/core/utils/methods.ts), with a path and a handler as arguments.
 ```ts
 # index.ts
 const app = new Byte()
     .get('/', (ctx) => ctx.body('Hi'))
     .post('/json', (ctx) => ctx.json({ hello: 'world' }));
 ```
-
-Supported methods are `get`, `post`, `put`, `delete`, `options`, and `head`.
 
 To handle all method using a handler, register the handle with `any` method:
 ```ts
