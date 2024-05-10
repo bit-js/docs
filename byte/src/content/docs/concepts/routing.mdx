@@ -7,7 +7,6 @@ HTTP routing is the process of directing an incoming request to a handler functi
 
 To register a route handler, call methods named after [HTTP verbs](https://github.com/bit-js/byte/blob/main/src/core/utils/methods.ts), with a path and a handler as arguments.
 ```ts
-# index.ts
 const app = new Byte()
     .get('/', (ctx) => ctx.body('Hi'))
     .post('/json', (ctx) => ctx.json({ hello: 'world' }));
@@ -15,7 +14,6 @@ const app = new Byte()
 
 To handle all method using a handler, register the handle with `any` method:
 ```ts
-# index.ts
 const app = new Byte()
     .any('/', (ctx) => ctx.body('Hi'));
 ```
@@ -26,7 +24,6 @@ Basic route patterns are supported.
 ### URL parameters
 Capture the value of a part separated by slash characters of the pathname.
 ```ts
-# index.ts
 app.get('/user/:id', (ctx) => {
     ctx.params.id; // Use the captured value
 });
@@ -40,7 +37,6 @@ Example cases:
 ### Wildcards
 Capture a slice from a specific part of a pathname.
 ```ts
-# index.ts
 app.get('/user/*', (ctx) => {
     ctx.params.$; // Use the captured value
 });

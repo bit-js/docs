@@ -1,0 +1,86 @@
+---
+title: Validator
+description: Validator in Byte.
+---
+
+A validator is a record of methods used to parse data from the incoming request.
+```ts
+{
+    body: async (ctx) => {
+        try {
+            // Parse and return the data
+            return await ctx.req.json();
+        } catch (err) {
+            // Return a response if failed
+            ctx.status = 403;
+            return ctx.body('Invalid body failed!');
+        }
+    },
+}
+```
+
+In the above example, if the `body` method returns a [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) object, the handler function 
+is skipped and the object is returned as a response. If it doesn't, the parsed data gets stored in `ctx.state.body`.
+
+If a validator method returns a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) 
+it should be an async function for the compiler to detect and optimize the validator call.
+
+This limitation exists because it is impossible to detect whether a function returns a 
+[`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) or not in JavaScript.
+
+To register a validator with a route handler:
+```ts
+app.post(
+    '/json', {
+        body: async (ctx) => {
+            try {
+                // Parse and return the data
+                return await ctx.req.json();
+            } catch (err) {
+                // Return a response if failed
+                ctx.status = 403;
+                return ctx.body('Invalid body failed!');
+            }
+        },
+    }, 
+    // Use the value in the handler
+    (ctx) => ctx.json(ctx.state.body)
+);
+```
+
+### Parsers
+These are built-in utilities to create validator methods for request body parsing.
+
+Example usage:
+```ts
+import { parse } from '@bit-js/byte';
+
+const validator = {
+    body: parse.text({
+        then(data) {
+            // Validate and return the data
+            // Or return a response if failed
+        },
+
+        catch(err) {
+            // This funcion handles parsing errors and validation errors
+            // So it must return a response
+            // In Bun you can ignore this function and use the native error handler
+        }
+    })
+} as const;
+```
+
+`then` and `catch` is optional so you can omit both and do:
+```ts
+const validator = {
+    body: parse.text()
+} as const;
+```
+
+Available parsers are:
+- `text`: Parse request body to text.
+- `json`: Parse request body to JSON.
+- `blob`: Parse request body to a `Blob`.
+- `form`: Parse request body to a `FormData`.
+- `buffer`: Parse request body to an `ArrayBuffer`.

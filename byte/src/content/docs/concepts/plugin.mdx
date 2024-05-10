@@ -1,0 +1,23 @@
+---
+title: Plugin
+description: Plugin in Byte.
+---
+
+Plugin is a way for **third-party code** to modify the current app instance.
+```ts
+const plugin = {
+    plug(app) {
+        // Do something with the app instance
+        app.use(someMiddleware);
+    }
+};
+```
+
+To register plugins:
+```ts
+// Register one plugin
+app.register(plugin);
+
+// Register multiple plugins sequentially
+app.register(plugin1, plugin2, ...);
+```

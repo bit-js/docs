@@ -1,0 +1,37 @@
+---
+title: Middleware
+description: Middleware in Byte.
+---
+
+Middlewares are functions that execute sequentially before the handler or validator if presented.
+```ts
+(ctx) => {
+    // Do something with the context
+}
+```
+
+If a middleware returns a [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) object, the object is returned as a response directly.
+
+If a middleware returns a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) it should be an async function for the compiler to detect and inline the validator call.
+
+To register middlewares for all handlers of a `Byte` instance:
+```ts
+// Register one middleware
+app.use((ctx) => {
+    // Do something
+});
+
+// Register multiple middlewares
+app.use(
+    (ctx) => { /* Set some props */ },
+    (ctx) => { /* Maybe do headers validation */ },
+    ...
+);
+```
+
+To register middlewares for only one handler:
+```ts
+app.get(path, validator, ...middlewares, handler);
+```
+
+These middlewares will execute after the app instance middlewares and before the validator.

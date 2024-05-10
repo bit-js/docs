@@ -18,7 +18,10 @@ export default defineConfig({
 					label: 'Concepts',
 					items: [
 						{ label: 'Routing', link: '/concepts/routing' },
-						{ label: 'Context', link: '/concepts/context' }
+						{ label: 'Context', link: '/concepts/context' },
+						{ label: 'Validator', link: '/concepts/validator' },
+						{ label: 'Middleware', link: '/concepts/middleware' },
+						{ label: 'Plugin', link: '/concepts/plugin' }
 					]
 				}
 			],

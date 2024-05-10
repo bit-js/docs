@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check --bun && astro build --bun",
+    "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro --bun"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.22.2",
