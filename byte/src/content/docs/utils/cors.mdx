@@ -1,0 +1,39 @@
+---
+title: CORS
+description: Set CORS headers in Byte.
+---
+
+Use the `cors` utility method to create a middleware for setting CORS headers:
+```ts
+import { cors } from '@bit-js/byte';
+
+app.use(cors());
+```
+
+If an option object is not passed in, `Access-Control-Allow-Origin` header will be set to `*`;
+
+The options include:
+```ts
+interface CORSOptions {
+    // Set 'Access-Control-Allow-Origin' header
+    // Set the 'Vary' header to 'Origin' if only one origin is allowed
+    allowOrigin?: string;
+
+    // Set 'Access-Control-Allow-Methods' header
+    allowMethods?: string | string[];
+
+    // Set 'Access-Control-Expose-Headers' header
+    exposeHeaders?: Values;
+
+    // Set 'Access-Control-Max-Age' header 
+    maxAge?: number;
+
+    // Set 'Access-Control-Allow-Credentials' header
+    allowCredentials?: boolean;
+
+    // Set 'Access-Control-Allow-Headers' header
+    allowHeaders?: Values;
+}
+```
+
+For allowing multiple origins see [CSRF](/utils/csrf) utility.

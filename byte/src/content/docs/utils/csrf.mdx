@@ -1,0 +1,28 @@
+---
+title: CSRF
+description: Prevent CSRF attacks when using Byte.
+---
+
+Byte provides a simple mechanism to avoid CSRF attacks by whitelisting origins:
+```ts
+import { csrf } from '@bit-js/byte';
+
+app.use(csrf());
+```
+
+If an option object is not passed in, the middleware will only allow requests from the server origin.
+
+The options include:
+```ts
+interface CSRFOptions {
+    // Allowed origins
+    origins?: string[];
+
+    // A function to validate origins if an origin whitelist is not provided
+    // or the origin is not included in the list 
+    verify?: (origin: string) => boolean;
+
+    // The response to return if origin is not valid
+    fallback?: (ctx: Context) => Response;
+}
+```

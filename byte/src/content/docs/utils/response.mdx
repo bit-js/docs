@@ -1,0 +1,28 @@
+---
+title: Response
+description: Response utilities in Byte.
+---
+
+Byte includes utility functions to create static response handlers:
+```ts
+import { send } from '@bit-js/byte';
+
+// Send body
+app.get('/body', send.body('Hi'));
+
+// Send plain text
+app.get('/text', send.text('Hi'));
+
+// Send JSON
+app.get('/info', send.json({ message: 'Hi' }));
+
+// Send HTML
+app.get('/page', send.html('<p>Hi</p>'));
+```
+
+All methods accept a response body and a [`ResponseInit`](https://developer.mozilla.org/en-US/docs/Web/API/Response/Response#options) object as arguments.
+
+For `body`, `text` and `html` method, the response body can be in any format listed [here](https://developer.mozilla.org/en-US/docs/Web/API/Response/Response#body), 
+while the `json` method only accepts values that are serializable using [`JSON.stringify`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify).
+
+Note that the responses create by these handlers do not contain `status`, `statusText` and `headers` from the request context.

@@ -29,9 +29,4 @@ app.use(
 );
 ```
 
-To register middlewares for only one handler:
-```ts
-app.get(path, validator, ...middlewares, handler);
-```
-
 These middlewares will execute after the app instance middlewares and before the validator.

@@ -1,0 +1,42 @@
+---
+title: Query
+description: Query parsing with Byte.
+---
+
+Byte includes utilities for fast query parsing.
+```ts
+import { query } from '@bit-js/byte';
+
+// Retrieve a parameter value from the query
+// If the schema is omitted it will parse the value to string
+const parse = query.get('name', schema);
+
+// Pass in the request context
+// If schema type is string -> return string or null if the parameter is not found
+// If schema type is number -> return number or NaN if the parameter is not found or invalid
+// If schema type is boolean -> return true if the parameter is presented in the query and false otherwise 
+parse(ctx);
+
+// Retrieve multiple parameter values from the query
+const parseAll = query.schema({
+    name: nameSchema,
+    age: ageSchema,
+    ...
+});
+
+// Return an object with all provided properties or null if any of 
+// the property does not match the corresponding schema
+parseAll(ctx);
+```
+
+A query schema is as follows:
+```ts
+interface Schema {
+    // The type of the parsed value
+    type: 'number' | 'string' | 'bool';
+
+    // The max values to obtain from the query
+    // This property will be ignored if the type provided is 'bool'
+    maxItems?: number;
+}
+```

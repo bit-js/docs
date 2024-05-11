@@ -23,6 +23,16 @@ export default defineConfig({
 						{ label: 'Middleware', link: '/concepts/middleware' },
 						{ label: 'Plugin', link: '/concepts/plugin' }
 					]
+				},
+				{
+					label: 'Utilities',
+					items: [
+						{ label: 'Response', link: '/utils/response' },
+						{ label: 'CORS', link: '/utils/cors' },
+						{ label: 'CSRF', link: '/utils/csrf' },
+						{ label: 'Query', link: '/utils/query' },
+						{ label: 'Client', link: '/utils/client' }
+					]
 				}
 			],
 		}),

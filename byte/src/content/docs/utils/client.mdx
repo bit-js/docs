@@ -1,0 +1,49 @@
+---
+title: Client
+description: A Byte client with type reflection.
+---
+
+Byte provides a client named `bit` with automatic type reflection.
+
+To use the client, you need to export the app type.
+```ts
+# server.ts
+import { Byte, send, parse } from '@bit-js/byte';
+
+// Chaining is required for type inference
+const app = new Byte()
+    .get('/', send.body('Hi'))
+    .post('/echo', {
+        body: parse.json()
+    }, (ctx) => ctx.json(ctx.state.body));
+
+export type TApp = typeof app;
+```
+
+Then import the type and use it in client-side code:
+```ts
+# client.ts
+import type { TApp } from './server';
+import { bit } from '@bit-js/byte';
+
+// Base URL to create requests
+const client = bit<TApp>('http://localhost:3000');
+
+// Routes get automatic type inference
+const msg = await client.get('/');
+await msg.text(); // 'Hi'
+
+const echo = await client.post('/echo', {
+    // Body get automatically serialized
+    body: { hi: 'there' }
+});
+await echo.json(); // { hi: 'there' }
+```
+
+You can create a similar client for server-side testing:
+```ts
+# server.ts
+const client = app.client();
+```
+
+The difference is that the client side bundle will not include the whole server-side app.
