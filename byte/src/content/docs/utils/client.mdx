@@ -3,7 +3,7 @@ title: Client
 description: A Byte client with type reflection.
 ---
 
-Byte provides a client named `bit` with automatic type reflection.
+Byte provides a client named `bit` with route type reflection.
 
 To use the client, you need to export the app type.
 ```ts
@@ -40,6 +40,7 @@ const echo = await client.post('/echo', {
 await echo.json(); // { hi: 'there' }
 ```
 
+### Testing
 You can create a similar client for server-side testing:
 ```ts
 # server.ts

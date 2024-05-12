@@ -1,0 +1,96 @@
+---
+title: MVC
+description: MVC pattern in Byte.
+---
+
+This page is a guide to use the MVC pattern with Byte.
+
+### Controller
+Every `Byte` instance is equal to a controller.
+
+```ts
+// Don't do this
+app.get('/', Controller.index);
+
+// Do this instead
+app.get('/', (ctx) => {
+    // Write the handler code here
+    // Does not require manual typings
+});
+```
+
+### Service
+Any piece of code that can be decoupled from the controller 
+should be separated into a service:
+
+```ts
+# service.ts
+export function search(list: number[], value: number): boolean {
+    let low = 0;
+    let high = list.length;
+
+    while (low <= high) {
+        const mid = (low + high) >>> 1;
+
+        if (list[mid] < value) low = mid + 1;
+        else high = mid - 1;
+    }
+
+    return list[low] === value;
+}
+```
+
+```ts
+# controller.ts
+import * as service from './service';
+
+const getNumbers = query.get('number', { 
+    type: 'number',
+    maxItems: 5000
+});
+
+app.get('/guess', (ctx) => ctx.body(
+    service.search(getNumbers(ctx), 10) ? '1' : '0'
+));
+```
+
+### Model
+Models are handled by [validators](/concepts/validator) in Byte.
+
+You can create separate validator methods using `Byte.handle`:
+```ts
+# model.ts
+export const validateBody = Byte.handle((ctx) => {
+    // Return a result or a Response object
+});
+```
+
+```ts
+# controller.ts
+import * as model from './model';
+
+app.post('/json', { 
+    body: model.validateBody
+}, (ctx) => {
+    // Use ctx.state.body here
+});
+```
+
+Or you can create a validator directly:
+```ts
+# model.ts
+export const userValidator = Byte.state({
+    body: (ctx) => {
+        // Return a result or a Response object
+    }
+});
+```
+
+```ts
+# controller.ts
+import { userValidator } from './model';
+
+app.post('/json', userValidator, (ctx) => {
+    // Use ctx.state.body here
+});
+```

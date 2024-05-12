@@ -1,0 +1,76 @@
+---
+title: Basic Patterns
+description: Basic patterns in Byte.
+---
+
+Here are all the basic patterns that should be used with Byte.
+
+### Route splitting
+Routes in different instances can be merged using `app.route`.
+```ts
+app.route('/prefix', anotherApp);
+```
+
+You can create instances for route merging only:
+```ts
+const app = Byte.route('/user', userAPIs)
+    .route('/channel', channelAPIs);
+```
+
+`Byte.route` is a shorthand, which means this code:
+```ts
+Byte.route('/prefix', anotherApp);
+```
+Does the same thing as:
+```ts
+new Byte().route('/prefix', anotherApp);
+```
+
+### Code splitting
+Code splitting can be done by decoupling parts like [middlewares](/concepts/middleware), 
+[validators](/concepts/validator), or request handlers.
+
+`Byte.handle` is a wrapper to create functions which accepts a 
+request [context](/concepts/context) as an argument.
+
+These functions can be used as request handlers, validator methods or middlewares.
+```ts
+const fn = Byte.handle((ctx) => {
+    // Do something with the request context
+});
+```
+
+`Byte.state` is a wrapper to create [validators](/concepts/validator).
+```ts
+const validator = Byte.state({
+    body: (ctx) => {
+        // Do something with the request context
+    }
+});
+```
+
+`Byte.plugin` is a wrapper to create [plugins](/concepts/plugin).
+```ts
+const plugin = Byte.plugin({
+    plug: (app) => {
+        // Do something with the app instance
+    }
+});
+```
+
+### Chaining
+Chaining should be used if you need [client](/utils/client) type inference.
+
+Chainable methods include `use`, `register`, `route`, and all methods for registering request handlers.
+```ts
+const app = new Byte()
+    .use(csrf(), cors())
+    .post('/echo', {
+        body: parse.json()
+    }, (ctx) => ctx.json(ctx.state.body));
+```
+
+Middlewares should be registered **before** handlers to avoid unexpected behavior.:w
+
+### Testing
+See the testing client docs [here](/utils/client#testing).

@@ -1,11 +1,16 @@
 ---
-title: Validator
-description: Validator in Byte.
+title: Validators
+description: Validators in Byte.
 ---
 
-A validator is a record of methods used to parse data from the incoming request.
+Validators are records of methods used to parse data from the incoming request.
+
+If a validator method returns a [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) object, the handler function 
+is skipped and the object is returned as a response. 
+
+If it doesn't, the parsed data gets stored in `ctx.state.body` and the request handler is executed.
 ```ts
-{
+const validator = {
     body: async (ctx) => {
         try {
             // Parse and return the data
@@ -16,16 +21,11 @@ A validator is a record of methods used to parse data from the incoming request.
             return ctx.body('Invalid body failed!');
         }
     },
-}
+} as const;
 ```
 
-In the above example, if the `body` method returns a [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) object, the handler function 
-is skipped and the object is returned as a response. If it doesn't, the parsed data gets stored in `ctx.state.body`.
-
 If a validator method returns a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) 
-it should be an async function for the compiler to detect and optimize the validator call.
-
-This limitation exists because it is impossible to detect whether a function returns a 
+it should be an async function for the compiler to detect and optimize the validator call, due to it being impossible to detect whether a function returns a 
 [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) or not in JavaScript.
 
 To register a validator with a route handler:
@@ -48,10 +48,10 @@ app.post(
 );
 ```
 
+The type of `ctx.state.body` is inferred automatically.
+
 ### Parsers
 These are built-in utilities to create validator methods for request body parsing.
-
-Example usage:
 ```ts
 import { parse } from '@bit-js/byte';
 
@@ -61,17 +61,15 @@ const validator = {
             // Validate and return the data
             // Or return a response if failed
         },
-
         catch(err) {
             // This funcion handles parsing errors and validation errors
             // So it must return a response
-            // In Bun you can ignore this function and use the native error handler
         }
     })
 } as const;
 ```
 
-`then` and `catch` is optional so you can omit both and do:
+The `then` and `catch` methods are optional so you can omit both:
 ```ts
 const validator = {
     body: parse.text()
@@ -84,3 +82,10 @@ Available parsers are:
 - `blob`: Parse request body to a `Blob`.
 - `form`: Parse request body to a `FormData`.
 - `buffer`: Parse request body to an `ArrayBuffer`.
+
+### Type validators
+At the moment, you should use [TypeBox](https://npmjs.com/package/@sinclair/typebox) 
+or [AJV](https://www.npmjs.com/package/ajv) for type validations.
+
+We're building a faster alternative to [AJV](https://www.npmjs.com/package/ajv) 
+with schema type inference, which you can track the progress [here](https://github.com/bit-js/vld).

@@ -19,9 +19,16 @@ export default defineConfig({
 					items: [
 						{ label: 'Routing', link: '/concepts/routing' },
 						{ label: 'Context', link: '/concepts/context' },
-						{ label: 'Validator', link: '/concepts/validator' },
-						{ label: 'Middleware', link: '/concepts/middleware' },
-						{ label: 'Plugin', link: '/concepts/plugin' }
+						{ label: 'Validators', link: '/concepts/validator' },
+						{ label: 'Middlewares', link: '/concepts/middleware' },
+						{ label: 'Plugins', link: '/concepts/plugin' }
+					]
+				},
+				{
+					label: 'Patterns',
+					items: [
+						{ label: 'Basic', link: '/patterns/basic' },
+						{ label: 'MVC', link: '/patterns/mvc' }
 					]
 				},
 				{
@@ -34,7 +41,7 @@ export default defineConfig({
 						{ label: 'Client', link: '/utils/client' }
 					]
 				}
-			],
+			]
 		}),
 	],
 });
