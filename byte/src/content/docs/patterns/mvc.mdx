@@ -3,9 +3,11 @@ title: MVC
 description: MVC pattern in Byte.
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components'
+
 This page is a guide to use the MVC pattern with Byte.
 
-### Controller
+### Controllers
 Every `Byte` instance is equivalent to a controller.
 
 ```ts
@@ -19,64 +21,77 @@ app.get('/', (ctx) => {
 });
 ```
 
-### Service
-Any piece of code that can be decoupled from the controller 
+### Services
+Some piece of code that can be decoupled from the controller 
 should be separated into a service:
 
-```ts
-# service.ts
-export const getNumbers = query.get('number', { 
-    type: 'number',
-    maxItems: 5000
-});
-```
+<Tabs>
+    <TabItem label='Service' icon='bars'>
+    ```ts
+    export const getNumbers = query.get('number', { 
+        type: 'number',
+        maxItems: 5000
+    });
+    ```
+    </TabItem>
+    <TabItem label='Controller' icon='setting'>
+    ```ts
+    import * as service from './service';
 
-```ts
-# controller.ts
-import * as service from './service';
+    app.get('/numbers', (ctx) => ctx.body(
+        service.getNumbers(ctx).join(',')
+    ));
+    ```
+    </TabItem>
+</Tabs>
 
-app.get('/numbers', (ctx) => ctx.body(
-    service.getNumbers(ctx).join(',')
-));
-```
-
-### Model
+### Models
 Models are handled by [validators](/concepts/validator) in Byte.
 
 You can create separate validator methods using `Byte.handle`:
-```ts
-# model.ts
-export const validateBody = Byte.handle((ctx) => {
-    // Return a result or a Response object
-});
-```
 
-```ts
-# controller.ts
-import * as model from './model';
+<Tabs>
+    <TabItem label='Model' icon='seti:db'>
+    ```ts
+    export const validateBody = Byte.handle((ctx) => {
+        // Return a result or a Response object
+    });
+    ```
+    </TabItem>
+    <TabItem label='Controller' icon='setting'>
+    ```ts
+    import * as model from './model';
 
-app.post('/json', { 
-    body: model.validateBody
-}, (ctx) => {
-    // Use ctx.state.body here
-});
-```
+    app.post('/json', { 
+        body: model.validateBody
+    }, (ctx) => {
+        // Use ctx.state.body here
+    });
+    ```
+    </TabItem>
+</Tabs>
 
 Or you can create a validator directly:
-```ts
-# model.ts
-export const userValidator = Byte.state({
-    body: (ctx) => {
-        // Return a result or a Response object
-    }
-});
-```
+<Tabs>
+    <TabItem label='Model' icon='seti:db'>
+    ```ts
+    export const userValidator = Byte.state({
+        body: (ctx) => {
+            // Return a result or a Response object
+        }
+    });
+    ```
+    </TabItem>
+    <TabItem label='Controller' icon='setting'>
+    ```ts
+    import { userValidator } from './model';
 
-```ts
-# controller.ts
-import { userValidator } from './model';
+    app.post('/json', userValidator, (ctx) => {
+        // Use ctx.state.body here
+    });
+    ```
+    </TabItem>
+</Tabs>
 
-app.post('/json', userValidator, (ctx) => {
-    // Use ctx.state.body here
-});
-```
+
+
