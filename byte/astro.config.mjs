@@ -11,8 +11,10 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
-					label: 'Start',
-					link: '/start'
+					label: 'Guides',
+					items: [
+						{ label: 'Getting Started', link: '/guides/start' }
+					]
 				},
 				{
 					label: 'Concepts',
@@ -27,18 +29,18 @@ export default defineConfig({
 				{
 					label: 'Patterns',
 					items: [
-						{ label: 'Basic', link: '/patterns/basic' },
-						{ label: 'MVC', link: '/patterns/mvc' }
+						{ label: 'Basic Patterns', link: '/patterns/basic' },
+						{ label: 'MVC Pattern', link: '/patterns/mvc' }
 					]
 				},
 				{
 					label: 'Utilities',
 					items: [
-						{ label: 'Response', link: '/utils/response' },
-						{ label: 'CORS', link: '/utils/cors' },
-						{ label: 'CSRF', link: '/utils/csrf' },
-						{ label: 'Query', link: '/utils/query' },
-						{ label: 'Client', link: '/utils/client' }
+						{ label: 'Static Responses', link: '/utils/response' },
+						{ label: 'Handling CORS', link: '/utils/cors' },
+						{ label: 'CSRF Protection', link: '/utils/csrf' },
+						{ label: 'Query Parsing', link: '/utils/query' },
+						{ label: 'App Client', link: '/utils/client' }
 					]
 				}
 			]
