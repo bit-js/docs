@@ -25,32 +25,18 @@ should be separated into a service:
 
 ```ts
 # service.ts
-export function search(list: number[], value: number): boolean {
-    let low = 0;
-    let high = list.length;
-
-    while (low <= high) {
-        const mid = (low + high) >>> 1;
-
-        if (list[mid] < value) low = mid + 1;
-        else high = mid - 1;
-    }
-
-    return list[low] === value;
-}
+export const getNumbers = query.get('number', { 
+    type: 'number',
+    maxItems: 5000
+});
 ```
 
 ```ts
 # controller.ts
 import * as service from './service';
 
-const getNumbers = query.get('number', { 
-    type: 'number',
-    maxItems: 5000
-});
-
-app.get('/guess', (ctx) => ctx.body(
-    service.search(getNumbers(ctx), 10) ? '1' : '0'
+app.get('/numbers', (ctx) => ctx.body(
+    service.getNumbers(ctx).join(',')
 ));
 ```
 
