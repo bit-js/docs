@@ -18,7 +18,7 @@ const validator = {
         } catch (err) {
             // Return a response if failed
             ctx.status = 403;
-            return ctx.body('Invalid body failed!');
+            return ctx.body('Invalid body format!');
         }
     },
 } as const;
@@ -39,7 +39,7 @@ app.post(
             } catch (err) {
                 // Return a response if failed
                 ctx.status = 403;
-                return ctx.body('Invalid body failed!');
+                return ctx.body('Invalid body format!');
             }
         },
     }, 
