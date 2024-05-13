@@ -13,7 +13,8 @@ export default defineConfig({
 				{
 					label: 'Guides',
 					items: [
-						{ label: 'Getting Started', link: '/guides/start' }
+						{ label: 'Getting Started', link: '/guides/start' },
+						{ label: 'Benchmarking', link: '/guides/benchmarking' }
 					]
 				},
 				{
