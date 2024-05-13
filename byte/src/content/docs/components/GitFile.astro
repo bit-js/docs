@@ -1,0 +1,10 @@
+---
+import { Code } from 'astro:components';
+
+// Dynamic loading
+const code = await (
+    await fetch(`https://raw.githubusercontent.com${Astro.props.path}`)
+).text();
+---
+
+<Code code={code} lang={Astro.props.lang}></Code>
