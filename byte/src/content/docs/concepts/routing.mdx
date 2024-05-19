@@ -7,12 +7,18 @@ HTTP routing is the process of directing an incoming request to a handler functi
 
 To register a route handler, call methods named after [HTTP verbs](https://github.com/bit-js/byte/blob/main/src/core/utils/methods.ts), with a path and a handler as arguments.
 ```ts
-const app = new Byte()
-    .get('/', (ctx) => ctx.body('Hi'))
-    .post('/json', (ctx) => ctx.json({ hello: 'world' }));
+const app = new Byte();
+
+app.get('/', (ctx) => {
+  return ctx.text('Hi');
+});
+
+app.post('/json', (ctx) => {
+  return ctx.json({ message: 'Hello World!' });
+});
 ```
 
-To handle all method using a handler, register the handle with `any` method:
+To handle all methods using a handler, register the handle with `any` method:
 ```ts
 const app = new Byte()
     .any('/', (ctx) => ctx.body('Hi'));
@@ -25,8 +31,8 @@ Basic route patterns are supported.
 Capture the value of a part separated by slash characters of the pathname.
 ```ts
 app.get('/user/:id', (ctx) => {
-    // Use the captured value later
-    const { id } = ctx.params; 
+  const { id } = ctx.params;
+  return ctx.body(`Hey, this is the id from the URL parameter: ${id}`);
 });
 ```
 
@@ -39,8 +45,10 @@ Example cases:
 Capture a slice from a specific part of a pathname.
 ```ts
 app.get('/user/*', (ctx) => {
-    // Use the captured value later
-    const { $ } = ctx.params; 
+  const anything = ctx.params.$;
+  return ctx.body(
+    `You're not supposed to be here. The path ${anything} does not exist`
+  );
 });
 ```
 
