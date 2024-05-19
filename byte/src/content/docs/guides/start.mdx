@@ -16,8 +16,10 @@ A simple echo server in Bun:
 # index.ts
 import { Byte } from '@bit-js/byte';
 
-export default new Byte()
+const app = new Byte()
     .get('/', (ctx) => ctx.body('Hi'));
+    
+export default app;
 ```
 
 Navigate to [127.0.0.1:3000](http://127.0.0.1:3000). It should show `Hi` as a result.
