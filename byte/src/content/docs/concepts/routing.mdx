@@ -10,11 +10,11 @@ To register a route handler, call methods named after [HTTP verbs](https://githu
 const app = new Byte();
 
 app.get('/', (ctx) => {
-  return ctx.text('Hi');
+    return ctx.text('Hi');
 });
 
 app.post('/json', (ctx) => {
-  return ctx.json({ message: 'Hello World!' });
+    return ctx.json({ message: 'Hello World!' });
 });
 ```
 
@@ -31,8 +31,8 @@ Basic route patterns are supported.
 Capture the value of a part separated by slash characters of the pathname.
 ```ts
 app.get('/user/:id', (ctx) => {
-  const { id } = ctx.params;
-  return ctx.body(`Hey, this is the id from the URL parameter: ${id}`);
+    const { id } = ctx.params;
+    return ctx.body(`Hey, this is the id from the URL parameter: ${id}`);
 });
 ```
 
@@ -45,10 +45,10 @@ Example cases:
 Capture a slice from a specific part of a pathname.
 ```ts
 app.get('/user/*', (ctx) => {
-  const anything = ctx.params.$;
-  return ctx.body(
-    `You're not supposed to be here. The path ${anything} does not exist`
-  );
+    const anything = ctx.params.$;
+    return ctx.body(
+      `You're not supposed to be here. The path ${anything} does not exist`
+    );
 });
 ```
 
