@@ -25,7 +25,8 @@ Basic route patterns are supported.
 Capture the value of a part separated by slash characters of the pathname.
 ```ts
 app.get('/user/:id', (ctx) => {
-    ctx.params.id; // Use the captured value
+    // Use the captured value later
+    const { id } = ctx.params; 
 });
 ```
 
@@ -38,7 +39,8 @@ Example cases:
 Capture a slice from a specific part of a pathname.
 ```ts
 app.get('/user/*', (ctx) => {
-    ctx.params.$; // Use the captured value
+    // Use the captured value later
+    const { $ } = ctx.params; 
 });
 ```
 
