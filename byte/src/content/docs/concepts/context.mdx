@@ -17,10 +17,9 @@ The context includes the parsed request pathname and the start and end indices o
 // The full url is http://localhost:3000/context/middle/end
 // The path starts at 21 and ends at 40
 // So the full sentence should be: "Hey, these are the path, start of the path and the end of it: /context/middle/end, 21, 40"
-app.get(
-    '/context/middle/end', 
-    (ctx) => ctx.body(`Hey, these are the path, start of the path and the end of it: ${ctx.path}, ${ctx.pathStart}, ${ctx.pathEnd}`)
-);
+app.get('/context/middle/end', (ctx) => ctx.body(
+    `Hey, these are the path, start of the path and the end of it: ${ctx.path}, ${ctx.pathStart}, ${ctx.pathEnd}`
+));
 ```
 
 ### Parameters
