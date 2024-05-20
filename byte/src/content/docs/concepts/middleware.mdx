@@ -18,9 +18,20 @@ To register middlewares for all handlers of a `Byte` instance:
 ```ts
 // Register one middleware
 app.use((ctx) => {
-    // Do something
+    if (ctx.req.headers.get('X-Powered-By') !== 'caffeine') {
+        ctx.status = 403;
+        return ctx.body('Rejected');
+      }
 });
 
+app.get('/middlewares', (ctx) => {
+    return ctx.body(
+        'This will not be sent if the X-Powered-By header is something other than caffeine'
+      );
+});
+```
+
+```ts
 // Register multiple middlewares
 app.use(
     (ctx) => { /* Set some props */ },
