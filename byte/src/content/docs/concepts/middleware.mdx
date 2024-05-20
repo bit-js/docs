@@ -18,26 +18,16 @@ To register middlewares for all handlers of a `Byte` instance:
 ```ts
 // Register one middleware
 app.use((ctx) => {
-    if (ctx.req.headers.get('X-Powered-By') !== 'caffeine') {
+    if (ctx.req.headers.get('Origin') !== 'https://example.com') {
         ctx.status = 403;
         return ctx.body('Rejected');
-      }
+    }
 });
 
-app.get('/middlewares', (ctx) => {
-    return ctx.body(
-        'This will not be sent if the X-Powered-By header is something other than caffeine'
-      );
-});
-```
-
-```ts
 // Register multiple middlewares
-app.use(
-    (ctx) => { /* Set some props */ },
-    (ctx) => { /* Maybe do headers validation */ },
-    ...
-);
+app.use(csrf, cors, ...);
+
+// Handler will run after middleware
+app.get('/middlewares', (ctx) => ctx.body('Hi'));
 ```
 
-These middlewares will execute after the app instance middlewares and before the validator.

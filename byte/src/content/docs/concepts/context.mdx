@@ -8,7 +8,7 @@ Context is an object which contains the parsed data from the current request.
 This object is passed in the request handler as an argument.
 ```ts
 app.get('/context', (ctx) => {
-    //Here we return the path
+    // Here we return the path
     return ctx.body(ctx.path);
 });
 ```
@@ -16,49 +16,36 @@ app.get('/context', (ctx) => {
 ### Path
 The context includes the parsed request pathname and the start and end indices of the pathname.
 ```ts
-app.get('/context/middle/end', (ctx) => {
-    const { path, pathStart, pathEnd } = ctx;
-    /*
-    The full url is http://localhost:3000/context/middle/end
-    The path starts at 21 and ends at 40
-    So the full sentence should be: "Hey, these are the path, start of the path and the end of it: /context/middle/end, 21, 40"
-    */
-    return ctx.body(
-      `Hey, these are the path, start of the path and the end of it: ${path}, ${pathStart}, ${pathEnd}`
-    );
-});
+// The full url is http://localhost:3000/context/middle/end
+// The path starts at 21 and ends at 40
+// So the full sentence should be: "Hey, these are the path, start of the path and the end of it: /context/middle/end, 21, 40"
+app.get(
+    '/context/middle/end', 
+    (ctx) => ctx.body(`Hey, these are the path, start of the path and the end of it: ${ctx.path}, ${ctx.pathStart}, ${ctx.pathEnd}`)
+);
 ```
 
 ### Parameters
-The context includes the URL parameters and results of validators.
+The context includes parsed parameters from the request URL.
 ```ts
-app.get('/context/parameters/:thisisaparam', (ctx) => {
-    /*
-    Upon visiting http://localhost:3000/context/parameters/apple
-    We get back: "This is a parameter: apple"
-    */
-    const { thisisaparam } = ctx.params;
-    return ctx.body(`This is a parameter: ${thisisaparam}`);
-});
-```
-
-```ts
-// Validator results
-ctx.state;
+// Upon visiting http://localhost:3000/context/parameters/apple
+// We get back: "This is a parameter: apple"
+app.get(
+    '/context/parameters/:name', 
+    (ctx) => ctx.body(`This is a parameter: ${ctx.params.name}`)
+);
 ```
 
 ### Request
-The context includes the original request object.
+The context includes the original [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) object.
 ```ts
-app.post('/context/request', async (ctx) => {
-    /*
-      To see a visible response, send a POST request to http://localhost:3000/context/request
-      We will send the following JSON: {"message":"Hey"}
-      The response in postman should be the exact same JSON returned
-      Check out all supported request methods here: https://github.com/bit-js/byte/blob/main/src/core/utils/methods.ts
-    */
-    return ctx.json(await ctx.req.json());
-});
+// To see a visible response, send a POST request to http://localhost:3000/context/request
+// We will send the following JSON: {"message":"Hey"}
+// The response should be the exact same JSON returned
+app.post(
+    '/context/request', 
+    async (ctx) => ctx.json(await ctx.req.json())
+);
 ```
 
 ### Response methods
@@ -84,10 +71,13 @@ ctx.redirect(location, statusCode);
 You can add headers, set the status code and text of the response:
 ```ts
 app.get('/context/headersandstatus', (ctx) => {
-    //Set the status
+    // Set the status
     ctx.status = 200;
-    //Add or set current headers
-    ctx.headers['X-Powered-By'] = 'caffeine';
-    return ctx.html('<h1>Check status and headers with Postman</h1>');
+
+    // Add or set current headers
+    ctx.headers['X-Powered-By'] = 'byte';
+
+    // Send back response with headers and status code
+    return ctx.html('<h1>Hi</h1>');
 });
 ```
