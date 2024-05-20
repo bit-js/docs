@@ -7,10 +7,8 @@ Context is an object which contains the parsed data from the current request.
 
 This object is passed in the request handler as an argument.
 ```ts
-app.get('/context', (ctx) => {
-    // Here we return the path
-    return ctx.body(ctx.path);
-});
+// Here we return the path
+app.get('/context', (ctx) => ctx.body(ctx.path));
 ```
 
 ### Path
@@ -52,7 +50,7 @@ app.post(
 The context includes methods to return a response object.
 
 ```ts
-// Send a response with the provided BodyInit (text, streams, binary format)
+// Send a response with the provided BodyInit (text, streams, typed arrays, ...)
 ctx.body('Hi');
 
 // Send plain text response
@@ -70,7 +68,7 @@ ctx.redirect(location, statusCode);
 
 You can add headers, set the status code and text of the response:
 ```ts
-app.get('/context/headersandstatus', (ctx) => {
+app.get('/context/headers/and/status', (ctx) => {
     // Set the status
     ctx.status = 200;
 
