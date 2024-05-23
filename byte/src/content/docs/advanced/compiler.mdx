@@ -13,7 +13,7 @@ const app = new Byte()
 ```
 
 The route will be stored as:
-```
+```ts
 const route = {
     method: 'GET',
     path: '/',
@@ -53,7 +53,7 @@ async function run(ctx: Context, { actions, validator, handler }: Route) {
         }
     }
 
-    // Run handlers
+    // Run the handler
     return handler(ctx);
 }
 ```
@@ -78,13 +78,14 @@ async function run(ctx: Context) {
 ```
 
 The compiler can optimize even more in these cases:
-- If a function has no parameter then do not pass in the context as an argument.
+- If a function has no parameter then do not pass `ctx` as an argument.
 - If a function is not asynchronous then remove `await`.
-- If no functions have parameters then the `run` function does not need the context as a parameter.
+- If no functions have parameters then the `run` function does not need `ctx` as a parameter.
 - If no functions are asynchronous then the `run` function can be synchronous.
 
-The routing phase is JIT compiled with the [Blitz](https://www.npmjs.com/package/@bit-js/blitz) router.
-You can ignore JIT compilation for this phase by using [EdgeRouter](https://www.npmjs.com/package/@bit-js/blitz#edge-router).
+### Route matching
+The routing matching phase is JIT compiled by the [Blitz](https://www.npmjs.com/package/@bit-js/blitz) router.
+You can ignore JIT compilation by using [EdgeRouter](https://www.npmjs.com/package/@bit-js/blitz#edge-router).
 ```ts
 import { EdgeRouter } from '@bit-js/blitz';
 
