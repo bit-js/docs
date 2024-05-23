@@ -18,7 +18,7 @@ const route = {
     method: 'GET',
     path: '/',
     handler: f4,
-    validator: { body: f3 }
+    validator: { body: f3 },
     actions: [[f1, f2]]
 };
 ```
@@ -82,6 +82,8 @@ The compiler can optimize even more in these cases:
 - If a function is not asynchronous then remove `await`.
 - If no functions have parameters then the `run` function does not need `ctx` as a parameter.
 - If no functions are asynchronous then the `run` function can be synchronous.
+
+The source code of the compiler can be seen [here](https://github.com/bit-js/byte/blob/main/src/core/server/route.ts#L61).
 
 ### Route matching
 The routing matching phase is JIT compiled by the [Blitz](https://www.npmjs.com/package/@bit-js/blitz) router.
