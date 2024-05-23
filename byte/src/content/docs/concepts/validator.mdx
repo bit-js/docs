@@ -50,42 +50,52 @@ app.post(
 
 The type of `ctx.state.body` is inferred automatically.
 
-### Parsers
-These are built-in utilities to create validator methods for request body parsing.
-```ts
-import { parse } from '@bit-js/byte';
-
-const validator = {
-    body: parse.text({
-        then(data) {
-            // Validate and return the data
-            // Or return a response if failed
-        },
-        catch(err) {
-            // This funcion handles parsing errors and validation errors
-            // So it must return a response
-        }
-    })
-} as const;
-```
-
-The `then` and `catch` methods are optional so you can omit both:
-```ts
-const validator = {
-    body: parse.text()
-} as const;
-```
-
-Available parsers are:
-- `text`: Parse request body to text.
-- `json`: Parse request body to JSON.
-- `blob`: Parse request body to a `Blob`.
-- `form`: Parse request body to a `FormData`.
-- `buffer`: Parse request body to an `ArrayBuffer`.
-
 ### Type validators
-At the moment, you should use [TypeBox](https://npmjs.com/package/@sinclair/typebox) 
+You should use validator libraries like [TypeBox](https://npmjs.com/package/@sinclair/typebox) 
 or [AJV](https://www.npmjs.com/package/ajv) for type validations.
 
-We're building a faster alternative to [AJV](https://www.npmjs.com/package/ajv) 
-with schema type inference, which you can track the progress [here](https://github.com/bit-js/vld).
+Here is a schema-to-validator utility if you use [TypeBox](https://npmjs.com/package/@sinclair/typebox):
+```ts
+import type { TSchema, Static } from '@sinclair/typebox';
+import { TypeCompiler } from '@sinclair/typebox/compiler';
+
+import { Byte } from '@bit-js/byte';
+
+// Quick error catching
+function noop() { return null; }
+
+// Create a validator method from a TypeBox schema to validate request body
+export default function schemaValidator<Schema extends TSchema>(schema: Schema) {
+    const compileResult = TypeCompiler.Compile(schema);
+
+    return Byte.handle(async (ctx) => {
+        const body = await ctx.req.json().catch(noop);
+        if (body === null) {
+            ctx.status = 403;
+            return ctx.body('Invalid body format!');
+        }
+
+        const errorValue = compileResult.Errors(body).First();
+        if (errorValue === undefined) return body as Static<Schema>;
+
+        ctx.status = 403;
+        return ctx.body(errorValue.message);
+    });
+}
+```
+
+And example usage:
+```ts
+import { Type } from '@sinclair/typebox';
+
+// Create the TypeBox type
+const Message = Type.Object({
+    from: Type.String({ minLength: 3, maxLength: 32 }),
+    content: Type.String({ minLength: 1, maxLength: 2000 })
+});
+
+// Use in a validator record
+app.post('/json', {
+    message: schemaValidator(Message)
+}, (ctx) => ctx.json(ctx.state.message));
+```
