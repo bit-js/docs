@@ -86,8 +86,8 @@ The compiler can optimize even more in these cases:
 The source code of the compiler can be seen [here](https://github.com/bit-js/byte/blob/main/src/core/server/route.ts#L61).
 
 ### Route matching
-The routing matching phase is JIT compiled by the [Blitz](https://www.npmjs.com/package/@bit-js/blitz) router.
-You can ignore JIT compilation by using [EdgeRouter](https://www.npmjs.com/package/@bit-js/blitz#edge-router).
+The route matching phase is JIT compiled by the [Blitz](https://www.npmjs.com/package/@bit-js/blitz) router.
+You can skip JIT compilation for this phase by using [EdgeRouter](https://www.npmjs.com/package/@bit-js/blitz#edge-router).
 ```ts
 import { EdgeRouter } from '@bit-js/blitz';
 
