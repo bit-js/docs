@@ -1,0 +1,93 @@
+---
+title: JIT Compiler
+description: JIT compilers in Byte.
+---
+
+Byte includes a route compiler for inlining middlewares and validators.
+
+Here is an example application:
+```ts
+const app = new Byte()
+    .use(f1, f2)
+    .get('/', { body: f3 }, f4);
+```
+
+The route will be stored as:
+```
+const route = {
+    method: 'GET',
+    path: '/',
+    handler: f4,
+    validator: { body: f3 }
+    actions: [[f1, f2]]
+};
+```
+
+Without the JIT compiler the route will be interpreted using:
+```ts
+async function run(ctx: Context, { actions, validator, handler }: Route) {
+    // Run middlewares
+    if (actions.length !== 0)
+        for (let i = 0, { length } = actions; i < length; ++i) {
+            const actionList = actions[i];
+
+            for (let i = 0, { length } = actionList; i < length; ++i) {
+                const result = actionList[i](ctx);
+
+                const awaitedResult = result instanceof Promise ? await result : result;
+                if (awaitedResult instanceof Response) return awaitedResult;
+            }
+        }
+
+    // Run validators
+    if (validator !== null) {
+        const state = ctx.state = {};
+
+        for (const key in validator) {
+            const result = validator[key](ctx);
+
+            const awaitedResult = result instanceof Promise ? await result : result;
+            if (awaitedResult instanceof Response) return awaitedResult;
+
+            state[key] = awaitedResult;
+        }
+    }
+
+    // Run handlers
+    return handler(ctx);
+}
+```
+
+And with the JIT compiler it can be simplified to:
+```ts
+async function run(ctx: Context) {
+    // Run middlewares
+    const c1 = await f1(ctx);
+    if (c1 instanceof Response) return c1;
+
+    const c2 = await f2(ctx);
+    if (c2 instanceof Response) return c2;
+
+    // Run validators
+    const body = await f3(ctx);
+    if (body instanceof Response) return body;
+
+    ctx.state = { body };
+    return await f4(ctx);
+}
+```
+
+The compiler can optimize even more in these cases:
+- If a function has no parameter then do not pass in the context as an argument.
+- If a function is not asynchronous then remove `await`.
+- If no functions have parameters then the `run` function does not need the context as a parameter.
+- If no functions are asynchronous then the `run` function can be synchronous.
+
+The routing phase is JIT compiled with the [Blitz](https://www.npmjs.com/package/@bit-js/blitz) router.
+You can ignore JIT compilation for this phase by using [EdgeRouter](https://www.npmjs.com/package/@bit-js/blitz#edge-router).
+```ts
+import { EdgeRouter } from '@bit-js/blitz';
+
+// Build the fetch function with EdgeRouter
+app.build(new EdgeRouter());
+```

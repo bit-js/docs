@@ -43,6 +43,12 @@ export default defineConfig({
 						{ label: 'Query Parsing', link: '/utils/query' },
 						{ label: 'App Client', link: '/utils/client' }
 					]
+				},
+				{
+					label: 'Advanced',
+					items: [
+						{ label: 'JIT Compiler', link: '/advanced/compiler' }
+					]
 				}
 			]
 		}),
