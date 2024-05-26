@@ -13,9 +13,7 @@ import { Byte, send, parse } from '@bit-js/byte';
 // Chaining is required for type inference
 const app = new Byte()
     .get('/', send.body('Hi'))
-    .post('/echo', {
-        body: parse.json()
-    }, (ctx) => ctx.json(ctx.state.body));
+    .post('/echo', async (ctx) => ctx.json(await ctx.req.json()));
 
 export type TApp = typeof app;
 ```
