@@ -49,6 +49,13 @@ export default defineConfig({
 					items: [
 						{ label: 'JIT Compiler', link: '/advanced/compiler' }
 					]
+				},
+				{
+					label: 'How To',
+					items: [
+						{ label: 'Serving Files', link: '/how_to/serving_files' },
+						{ label: 'Server Timing', link: '/how_to/server_timing' }
+					]
 				}
 			]
 		}),

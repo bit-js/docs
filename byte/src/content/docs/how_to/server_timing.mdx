@@ -1,0 +1,44 @@
+---
+title: Server Timing
+description: Set Server-Timing metrics in Byte.
+---
+
+### Bun
+Start by installing `@bit-js/web-utils`:
+```bash
+bun add @bit-js/web-utils
+```
+
+Use it like so:
+```ts
+import { serverTiming } from '@bit-js/web-utils';
+
+app.post('/new', (ctx) => {
+  // Start the timer
+  const resolveTime = serverTiming.metric('resolveTime');
+
+  // Do something
+  resolveSomething(ctx);
+
+  // End the timer and set the result
+  resolveTime.attach(ctx.headers);
+});
+```
+
+### Deno
+Use it like so:
+```ts
+import { serverTiming } from 'npm:@bit-js/web-utils';
+
+app.post('/new', (ctx) => {
+  // Start the timer
+  const resolveTime = serverTiming.metric('resolveTime');
+
+  // Do something
+  resolveSomething(ctx);
+
+  // End the timer and set the result
+  resolveTime.attach(ctx.headers);
+});
+```
+

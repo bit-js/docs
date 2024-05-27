@@ -1,0 +1,30 @@
+---
+title: Serving Files
+description: Serve static files with Byte.
+---
+
+### Bun
+Serving static files with Byte on Bun.
+```ts
+// Registering routes for serving
+const publicDir = `${import.meta.dir}/public/`;
+app.any('/*', (ctx) => ctx.body(publicDir + ctx.params.$));
+
+// Serving
+Bun.serve({
+  // Get the fetch function
+  fetch: app.fetch,
+
+  // Handle uncaught error, which includes file not found
+  error: send.body(null, { status: 404 })
+});
+```
+
+### Deno
+Serving static files with Byte on Deno.
+```ts
+import { serveDir } from 'jsr:@std/http/file-server';
+
+const serveDirOptions = { fsRoot: `${import.meta.dir}/public/` };
+app.any('/*', (ctx) => serveDir(ctx.req, serveDirOptions));
+```
