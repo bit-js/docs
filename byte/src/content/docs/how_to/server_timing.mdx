@@ -42,3 +42,7 @@ app.post('/new', (ctx) => {
 });
 ```
 
+To specify a description for the metric:
+```ts
+serverTiming.metric('db_query', 'The time it takes to finish a database query');
+```
