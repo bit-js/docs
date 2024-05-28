@@ -51,10 +51,10 @@ export default defineConfig({
 					]
 				},
 				{
-					label: 'How To',
+					label: 'Snippets',
 					items: [
-						{ label: 'Serving Files', link: '/how_to/serving_files' },
-						{ label: 'Server Timing', link: '/how_to/server_timing' }
+						{ label: 'Serving Files', link: '/snippets/serving_files' },
+						{ label: 'Server Timing', link: '/snippets/server_timing' }
 					]
 				}
 			]
