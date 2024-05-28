@@ -65,9 +65,7 @@ Chainable methods include `use`, `register`, `route`, and all methods for regist
 ```ts
 const app = new Byte()
     .use(csrf(), cors())
-    .post('/echo', {
-        body: parse.json()
-    }, (ctx) => ctx.json(ctx.state.body));
+    .post('/echo', async (ctx) => ctx.body(await ctx.req.text()));
 ```
 
 Middlewares should be registered **before** handlers to avoid unexpected behaviors.
