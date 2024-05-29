@@ -69,7 +69,7 @@ app.get('/context/headers/and/status', (ctx) => {
     ctx.status = 200;
 
     // Add or set current headers
-    ctx.headers['X-Powered-By'] = 'byte';
+    ctx.headers.push(['X-Powered-By', 'byte']);
 
     // Send back response with headers and status code
     return ctx.html('<h1>Hi</h1>');
