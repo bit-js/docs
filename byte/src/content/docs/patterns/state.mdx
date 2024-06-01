@@ -1,0 +1,45 @@
+---
+title: State Management
+description: Request state management in Byte.
+---
+
+Byte has built-in mechanism for creating and managing states during requests.
+
+To create a state, call `app.set` with the state name and a handler that returns the initial state value:
+```ts
+app.set('message', async (ctx) => {
+  const body = await ctx.req.text();
+  return body.length > 10 && body.length < 20 ? body : null;
+});
+
+// Is the same as
+app.use(async (ctx) => {
+   const body = await ctx.req.text();
+   ctx.message = body.length > 10 && body.length < 20 ? body : null;
+});
+```
+
+And use it in other middlewares, validators or handlers (chaining is required):
+```ts
+app
+  // Attach 'startTime' property to the context on every request
+  .set('startTime', performance.now)
+  // Example middleware
+  .use(cors())
+  // Log the time it takes to run the CORS middleware
+  .use((ctx) => {
+    console.log(performance.now() - ctx.startTime);
+  });
+```
+
+The handler passed in `app.set` should be asynchronous if it returns a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+
+Because calling `app.set` is the same as registering a middleware, the following example will not work:
+```ts
+app
+  .use((ctx) => {
+    // 'ctx.startTime' is undefined
+    console.log(performance.now() - ctx.startTime);
+  })
+  .set('startTime', performance.now);
+```

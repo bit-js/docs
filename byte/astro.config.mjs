@@ -8,6 +8,7 @@ export default defineConfig({
 			title: 'Byte',
 			social: {
 				github: 'https://github.com/bit-js/byte',
+				discord: 'https://discord.gg/USBbVzDdPV'
 			},
 			sidebar: [
 				{
@@ -31,7 +32,8 @@ export default defineConfig({
 					label: 'Patterns',
 					items: [
 						{ label: 'Basic Patterns', link: '/patterns/basic' },
-						{ label: 'MVC Pattern', link: '/patterns/mvc' }
+						{ label: 'MVC Pattern', link: '/patterns/mvc' },
+						{ label: 'State Management', link: '/patterns/state' }
 					]
 				},
 				{

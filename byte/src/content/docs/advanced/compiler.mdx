@@ -3,7 +3,7 @@ title: JIT Compiler
 description: JIT compilers in Byte.
 ---
 
-Byte includes a route compiler for inlining middlewares and validators.
+Byte includes a route compiler for inlining middleware and validator method calls.
 
 Here is an example application:
 ```ts
@@ -58,7 +58,7 @@ async function run(ctx: Context, { actions, validator, handler }: Route) {
 }
 ```
 
-And with the JIT compiler it can be simplified to:
+With the JIT compiler it can be simplified to:
 ```ts
 async function run(ctx: Context) {
     // Run middlewares
