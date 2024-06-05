@@ -58,8 +58,13 @@ Here is a schema-to-validator utility if you use [TypeBox](https://npmjs.com/pac
 ```ts
 import type { TSchema, Static } from '@sinclair/typebox';
 import { TypeCompiler } from '@sinclair/typebox/compiler';
+import { TypeSystemPolicy } from '@sinclair/typebox/system';
 
-import { Byte } from '@bit-js/byte';
+import type { BaseContext, BasicResponse } from '@bit-js/byte';
+
+// Faster assertion for request body
+TypeSystemPolicy.AllowNaN = true;
+TypeSystemPolicy.AllowArrayObject = true;
 
 // Quick error catching
 function noop() { return null; }
@@ -68,7 +73,7 @@ function noop() { return null; }
 export default function schemaValidator<Schema extends TSchema>(schema: Schema) {
     const compileResult = TypeCompiler.Compile(schema);
 
-    return Byte.handle(async (ctx) => {
+    return async (ctx: BaseContext): Promise<BasicResponse<string> | Static<Schema>> => {
         const body = await ctx.req.json().catch(noop);
         if (body === null) {
             ctx.status = 403;
@@ -76,11 +81,11 @@ export default function schemaValidator<Schema extends TSchema>(schema: Schema) 
         }
 
         const errorValue = compileResult.Errors(body).First();
-        if (errorValue === undefined) return body as Static<Schema>;
+        if (errorValue === undefined) return body;
 
         ctx.status = 403;
         return ctx.body(errorValue.message);
-    });
+    };
 }
 ```
 
