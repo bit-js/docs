@@ -1,7 +1,14 @@
 ---
 import { Code } from 'astro:components';
+
+interface Props {
+    path: string;
+    lang: any;
+}
+
+const { props } = Astro;
 ---
 
 <Code code={await (
-    await fetch(`https://raw.githubusercontent.com${Astro.props.path}`)
-).text()} lang={Astro.props.lang}></Code>
+    await fetch(`https://raw.githubusercontent.com${props.path}`)
+).text()} lang={props.lang}></Code>
