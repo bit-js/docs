@@ -17,8 +17,9 @@ import { serverTiming } from '@bit-js/web-utils';
 app.set('resolveTime', serverTiming.metric('resolveTime'));
 
 // Set the result later
-app.defer((ctx) => {
-  ctx.resolveTime.append(ctx.res.headers);
+app.defer((res, ctx) => {
+  if(!(res instanceof Response)) return ctx.end();
+  ctx.resolveTime.append(res.headers);
 });
 
 // Do route handling normally
@@ -37,8 +38,9 @@ import { serverTiming } from 'npm:@bit-js/web-utils';
 app.set('resolveTime', serverTiming.metric('resolveTime'));
 
 // Set the result later
-app.defer((ctx) => {
-  ctx.resolveTime.append(ctx.res.headers);
+app.defer((res, ctx) => {
+  if(!(res instanceof Response)) return ctx.end();
+  ctx.resolveTime.append(res.headers);
 });
 
 // Do route handling normally
@@ -50,5 +52,5 @@ app.post('/new', (ctx) => {
 
 To specify a description for the metric:
 ```ts
-serverTiming.metric('db_query', 'The time it takes to finish a database query');
+serverTiming.metric('db_query', 'The time taken to finish a database query');
 ```

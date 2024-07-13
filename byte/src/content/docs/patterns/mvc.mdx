@@ -39,7 +39,7 @@ should be separated into a service:
     import * as service from './service';
 
     app.get('/numbers', (ctx) => ctx.body(
-        service.getNumbers(ctx).join(',')
+        service.getNumbers(ctx).join()
     ));
     ```
     </TabItem>
@@ -62,36 +62,11 @@ You can create separate validator methods using `Byte.handle`:
     ```ts
     import * as model from './model';
 
-    app.post('/json', { 
-        body: model.validateBody
-    }, (ctx) => {
-        // Use ctx.state.body here
-    });
+    app.state('body', model.validateBody)
+        .post('/json', (ctx) => {
+            // Use ctx.body here
+        });
     ```
     </TabItem>
 </Tabs>
-
-Or you can create a validator directly:
-<Tabs>
-    <TabItem label='Model' icon='seti:db'>
-    ```ts
-    export const userValidator = Byte.state({
-        body: (ctx) => {
-            // Return a result or a Response object
-        }
-    });
-    ```
-    </TabItem>
-    <TabItem label='Controller' icon='setting'>
-    ```ts
-    import { userValidator } from './model';
-
-    app.post('/json', userValidator, (ctx) => {
-        // Use ctx.state.body here
-    });
-    ```
-    </TabItem>
-</Tabs>
-
-
 

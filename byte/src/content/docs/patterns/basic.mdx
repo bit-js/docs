@@ -47,7 +47,7 @@ Chainable methods include `use`, `register`, `route`, and all methods for regist
 ```ts
 const app = new Byte()
     .use(csrf())
-    .use(cors())
+    .prepare(cors())
     .post('/echo', async (ctx) => ctx.body(await ctx.req.text()));
 ```
 

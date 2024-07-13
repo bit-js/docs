@@ -8,7 +8,7 @@ Serving static files with Byte on Bun.
 ```ts
 // Registering routes for serving
 const publicDir = `${import.meta.dir}/public/`;
-app.any('/*', (ctx) => ctx.body(publicDir + ctx.params.$));
+app.any('/*', (ctx) => ctx.body(Bun.file(publicDir + ctx.params.$)));
 
 // Serving
 Bun.serve({

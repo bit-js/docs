@@ -7,7 +7,7 @@ Use the `cors` utility method to create a middleware for setting CORS headers:
 ```ts
 import { cors } from '@bit-js/byte';
 
-app.use(cors());
+app.prepare(cors());
 ```
 
 If an option object is not passed in, `Access-Control-Allow-Origin` header will be set to `*`;

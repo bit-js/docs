@@ -1,15 +1,15 @@
 ---
-title: Query
-description: Query parsing with Byte.
+title: Form
+description: Form parsing with Byte.
 ---
 
-Byte includes utilities for fast query parsing.
+Byte includes utilities for fast form parsing.
 ```ts
-import { query } from '@bit-js/byte';
+import { form } from '@bit-js/byte';
 
 // Retrieve a parameter value from the query
 // If the schema is omitted it will parse the value to string
-const parse = query.get('name', schema);
+const parse = form.get('name', schema);
 
 // Pass in the request context
 // If schema type is string -> return string or null if the parameter is not found
@@ -18,7 +18,7 @@ const parse = query.get('name', schema);
 parse(ctx);
 
 // Retrieve multiple parameter values from the query
-const parseAll = query.schema({
+const parseAll = form.schema({
     name: nameSchema,
     age: ageSchema,
     ...
@@ -33,11 +33,10 @@ A query schema is as follows:
 ```ts
 interface Schema {
     // The type of the parsed value
-    type: 'number' | 'string' | 'bool';
+    type: 'number' | 'string' | 'bool' | 'file';
 
-    // The max values to obtain from the query
-    // This property will be ignored if the type provided is 'bool'
-    maxItems?: number;
+    // Whether to get multiple values of the property
+    multipleItems?: boolean;
 }
 ```
 
@@ -45,7 +44,7 @@ Some example schemas:
 ```ts
 const multipleStringSchema = {
   type: 'string',
-  maxItems: 10
+  multipleItems: true
 };
 
 const numberSchema = {
