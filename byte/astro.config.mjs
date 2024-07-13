@@ -31,8 +31,8 @@ export default defineConfig({
 					label: 'Patterns',
 					items: [
 						{ label: 'Basic Patterns', link: '/patterns/basic' },
-						{ label: 'MVC Pattern', link: '/patterns/mvc' },
-						{ label: 'State Management', link: '/patterns/state' }
+						{ label: 'State Management', link: '/patterns/state' },
+						{ label: 'MVC Pattern', link: '/patterns/mvc' }
 					]
 				},
 				{
@@ -42,6 +42,7 @@ export default defineConfig({
 						{ label: 'Handling CORS', link: '/utils/cors' },
 						{ label: 'CSRF Protection', link: '/utils/csrf' },
 						{ label: 'Query Parsing', link: '/utils/query' },
+						{ label: 'Form Parsing', link: '/utils/form' },
 						{ label: 'App Client', link: '/utils/client' }
 					]
 				},

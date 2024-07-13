@@ -8,16 +8,15 @@ Byte includes utilities for fast form parsing.
 import { form } from '@bit-js/byte';
 
 // Retrieve a parameter value from the query
-// If the schema is omitted it will parse the value to string
 const parse = form.get('name', schema);
 
 // Pass in the request context
-// If schema type is string -> return string or null if the parameter is not found
-// If schema type is number -> return number or NaN if the parameter is not found or invalid
-// If schema type is boolean -> return true if the parameter is presented in the query and false otherwise 
+// If schema type is string -> return string or null if the value is not found
+// If schema type is number -> return number or NaN if the value is not found or invalid
+// If schema type is boolean -> return true if the key is presented in the form and false otherwise 
 parse(ctx);
 
-// Retrieve multiple parameter values from the query
+// Retrieve multiple key values from the form
 const parseAll = form.schema({
     name: nameSchema,
     age: ageSchema,
@@ -29,7 +28,7 @@ const parseAll = form.schema({
 parseAll(ctx);
 ```
 
-A query schema is as follows:
+A form schema is as follows:
 ```ts
 interface Schema {
     // The type of the parsed value
