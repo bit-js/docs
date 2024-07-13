@@ -63,6 +63,7 @@ export default defineConfig({
 	],
 
 	prefetch: {
+		defaultStrategy: 'load',
 		prefetchAll: true
 	}
 });
