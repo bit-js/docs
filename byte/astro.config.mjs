@@ -23,7 +23,6 @@ export default defineConfig({
 					items: [
 						{ label: 'Routing', link: '/concepts/routing' },
 						{ label: 'Context', link: '/concepts/context' },
-						{ label: 'Validators', link: '/concepts/validator' },
 						{ label: 'Middlewares', link: '/concepts/middleware' },
 						{ label: 'Plugins', link: '/concepts/plugin' }
 					]

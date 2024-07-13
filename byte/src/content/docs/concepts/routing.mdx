@@ -44,3 +44,13 @@ Example cases:
 - `/user`: Does not match the pattern.
 
 The type of `ctx.params` is inferred automatically from the registered pattern.
+
+### Sub-routers
+To register all handlers from other `Byte` instance:
+```ts
+const api = new Byte()
+    .get('/', (ctx) => ctx.body('Hi'));
+
+const app = new Byte()
+    .route('/api', api);
+```

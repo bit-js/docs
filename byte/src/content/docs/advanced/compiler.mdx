@@ -8,8 +8,9 @@ Byte includes a route compiler for inlining middleware and validator method call
 Here is an example application:
 ```ts
 const app = new Byte()
-    .use(f1, f2)
-    .get('/', { body: f3 }, f4);
+    .use(f1)
+    .defer(f2)
+    .get('/', f3);
 ```
 
 The route will be stored as:
@@ -17,65 +18,29 @@ The route will be stored as:
 const route = {
     method: 'GET',
     path: '/',
-    handler: f4,
-    validator: { body: f3 },
-    actions: [[f1, f2]]
+    handler: f3,
+    actions: [[[2, f1]]]
+    defers: [[f2]]
 };
 ```
 
-Without the JIT compiler the route will be interpreted using:
-```ts
-async function run(ctx: Context, { actions, validator, handler }: Route) {
-    // Run middlewares
-    if (actions.length !== 0)
-        for (let i = 0, { length } = actions; i < length; ++i) {
-            const actionList = actions[i];
-
-            for (let i = 0, { length } = actionList; i < length; ++i) {
-                const result = actionList[i](ctx);
-
-                const awaitedResult = result instanceof Promise ? await result : result;
-                if (awaitedResult instanceof Response) return awaitedResult;
-            }
-        }
-
-    // Run validators
-    if (validator !== null) {
-        const state = ctx.state = {};
-
-        for (const key in validator) {
-            const result = validator[key](ctx);
-
-            const awaitedResult = result instanceof Promise ? await result : result;
-            if (awaitedResult instanceof Response) return awaitedResult;
-
-            state[key] = awaitedResult;
-        }
-    }
-
-    // Run the handler
-    return handler(ctx);
-}
-```
-
-With the JIT compiler it can be simplified to:
+With the JIT compiler the route execution can be simplified to:
 ```ts
 async function run(ctx: Context) {
     // Run middlewares
     const c1 = await f1(ctx);
     if (c1 instanceof Response) return c1;
 
+    let r = await f4(ctx);
+    
     const c2 = await f2(ctx);
-    if (c2 instanceof Response) return c2;
+    if (c2 instanceof Response) r = c2;
 
-    // Run validators
-    const body = await f3(ctx);
-    if (body instanceof Response) return body;
-
-    ctx.state = { body };
-    return await f4(ctx);
+    return r;
 }
 ```
+
+This reduces the amount of unnecessary checks the handlers need to do at request time.
 
 The compiler can optimize even more in these cases:
 - If a function has no parameter then do not pass `ctx` as an argument.
@@ -86,7 +51,7 @@ The compiler can optimize even more in these cases:
 The source code of the compiler can be seen [here](https://github.com/bit-js/byte/blob/main/src/core/server/route.ts#L61).
 
 ### Route matching
-The route matching phase is JIT compiled by the [Blitz](https://www.npmjs.com/package/@bit-js/blitz) router.
+The route matching phase uses the [Blitz](https://www.npmjs.com/package/@bit-js/blitz) router, which compiles the routes into an optimized matching function.
 You can skip JIT compilation for this phase by using [EdgeRouter](https://www.npmjs.com/package/@bit-js/blitz#edge-router).
 ```ts
 import { EdgeRouter } from '@bit-js/blitz';

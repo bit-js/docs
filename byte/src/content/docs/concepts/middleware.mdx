@@ -11,6 +11,7 @@ Middlewares are functions that execute sequentially before the handler or valida
 ```
 
 If a middleware returns a [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) object, the object is returned as a response directly.
+To skip checking this you can use `app.prepare` with the same arguments instead of `app.use`.
 
 If a middleware returns a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) it should be an async function for the compiler to detect and inline the validator call.
 
@@ -23,9 +24,6 @@ app.use((ctx) => {
         return ctx.body('Rejected');
     }
 });
-
-// Register multiple middlewares
-app.use(csrf, cors, ...);
 
 // Handler will run after middleware
 app.get('/middlewares', (ctx) => ctx.body('Hi'));

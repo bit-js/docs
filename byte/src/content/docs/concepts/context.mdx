@@ -52,13 +52,16 @@ The context includes methods to return a response object.
 // Send a response with the provided BodyInit (text, streams, typed arrays, ...)
 ctx.body('Hi');
 
+// Shorthand of `ctx.body(null)` - return a response with empty body
+ctx.end();
+
 // Send HTML response
 ctx.html('<p>Hi</p>');
 
 // Send JSON payload
 ctx.json({ hello: 'world' }); 
 
-// Redirection
+// Redirection (statusCode can be 301, 302, 307 or 308)
 ctx.redirect(location, statusCode); 
 ```
 
@@ -68,7 +71,7 @@ app.get('/context/headers/and/status', (ctx) => {
     // Set the status
     ctx.status = 200;
 
-    // Add or set current headers
+    // Add a new header key-value pair
     ctx.headers.push(['X-Powered-By', 'byte']);
 
     // Send back response with headers and status code

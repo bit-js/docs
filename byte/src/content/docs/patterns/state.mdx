@@ -5,29 +5,25 @@ description: Request state management in Byte.
 
 Byte has built-in mechanism for creating and managing states during requests.
 
-To create a state, call `app.set` with the state name and a handler that returns the initial state value:
+To attach a state to the `ctx` object, call `app.set` with the state name and a handler that returns the initial state value:
 ```ts
-app.set('message', async (ctx) => {
-  const body = await ctx.req.text();
-  return body.length > 10 && body.length < 20 ? body : null;
-});
+app.set('startTime', performance.now);
 
 // Is the same as
-app.use(async (ctx) => {
-   const body = await ctx.req.text();
-   ctx.message = body.length > 10 && body.length < 20 ? body : null;
+app.prepare((ctx) => {
+   ctx.startTime = performance.now();
 });
 ```
 
-And use it in other middlewares, validators or handlers (chaining is required):
+And use it in other middlewares or handlers (chaining is required):
 ```ts
 app
   // Attach 'startTime' property to the context on every request
   .set('startTime', performance.now)
   // Example middleware
-  .use(cors())
+  .prepare(cors())
   // Log the time it takes to run the CORS middleware
-  .use((ctx) => {
+  .prepare((ctx) => {
     console.log(performance.now() - ctx.startTime);
   });
 ```
@@ -37,9 +33,30 @@ The handler passed in `app.set` should be asynchronous if it returns a [`Promise
 Because calling `app.set` is the same as registering a middleware, the following example will not work:
 ```ts
 app
-  .use((ctx) => {
-    // 'ctx.startTime' is undefined
+  .prepare((ctx) => {
+    // 'ctx.startTime' is undefined, so this logs NaN
     console.log(performance.now() - ctx.startTime);
   })
   .set('startTime', performance.now);
+```
+
+## Validation
+You can validate the state value before attaching to `ctx` using `app.state`.
+```ts
+// My optimization trick
+const noop = () => null;
+
+app.state('message', async (ctx) => {
+  const message = await ctx.req.text().catch(noop);
+
+  // Return an empty response with status 403 
+  // if body parsing failed or message length is larger than 70
+  if (message === null || message.length > 70) {
+    ctx.status = 403;
+    return ctx.end();
+  }
+
+  // Attach to `ctx` to use later
+  return message;
+});
 ```
